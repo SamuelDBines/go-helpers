@@ -117,6 +117,8 @@ func isScalar(v any) bool {
 	}
 }
 
+func (y *Builder) Line(s string) { y.line(s) }
+
 func scalar(v any) string {
 	switch t := v.(type) {
 	case string:
