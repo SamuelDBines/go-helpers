@@ -18,7 +18,7 @@ func TestWriteZip(t *testing.T) {
 		t.Fatal(err)
 	}
 	var buf bytes.Buffer
-	err := WriteZip(&buf, []File{{Name: "a.txt", Path: p1}, {Name: "nested/b.txt", Path: p2}})
+	err := WriteZip(&buf, []FileToZip{{Name: "a.txt", Path: p1}, {Name: "nested/b.txt", Path: p2}})
 	if err != nil {
 		t.Fatal(err)
 	}

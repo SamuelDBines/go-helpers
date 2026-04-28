@@ -44,7 +44,6 @@ func parse(r *os.File) map[string]string {
 }
 
 func splitKV(line string) (key, val string, ok bool) {
-	// Find first unescaped '='
 	i := -1
 	esc := false
 	for idx, r := range line {

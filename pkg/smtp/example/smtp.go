@@ -1,4 +1,3 @@
-package example
 package main
 
 import (
@@ -7,26 +6,22 @@ import (
 	"log"
 	"os"
 
-	"github.com/emersion/go-smtp"
+	"github.com/SamuelDBines/go-helpers/pkg/smtp"
 )
 
 var addr = "127.0.0.1:1025"
 
 func init() {
-	flag.StringVar(&addr, "l", addr, "Listen address")
+	flag.StringVar(&addr, "l", addr, "listen address")
 }
 
 type backend struct{}
 
-func (bkd *backend) NewSession(c *smtp.Conn) (smtp.Session, error) {
+func (b *backend) NewSession(c *smtp.Conn) (smtp.Session, error) {
 	return &session{}, nil
 }
 
 type session struct{}
-
-func (s *session) AuthPlain(username, password string) error {
-	return nil
-}
 
 func (s *session) Mail(from string, opts *smtp.MailOptions) error {
 	return nil
@@ -37,7 +32,8 @@ func (s *session) Rcpt(to string, opts *smtp.RcptOptions) error {
 }
 
 func (s *session) Data(r io.Reader) error {
-	return nil
+	_, err := io.ReadAll(r)
+	return err
 }
 
 func (s *session) Reset() {}
@@ -50,12 +46,11 @@ func main() {
 	flag.Parse()
 
 	s := smtp.NewServer(&backend{})
-
 	s.Addr = addr
 	s.Domain = "localhost"
 	s.AllowInsecureAuth = true
 	s.Debug = os.Stdout
 
-	log.Println("Starting SMTP server at", addr)
+	log.Println("starting SMTP server at", addr)
 	log.Fatal(s.ListenAndServe())
 }
