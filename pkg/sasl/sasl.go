@@ -193,8 +193,8 @@ type oauthBearerServer struct {
 
 // Next
 
-func (s *anonymousServer) Next(response []byte) (challenge []byte, done bool, err error) {
-	if s.done {
+func (a *anonymousServer) Next(response []byte) (challenge []byte, done bool, err error) {
+	if a.done {
 		err = ErrUnexpectedClientResponse
 		return
 	}
@@ -204,9 +204,9 @@ func (s *anonymousServer) Next(response []byte) (challenge []byte, done bool, er
 		return
 	}
 
-	s.done = true
+	a.done = true
 
-	err = s.authenticate(string(response))
+	err = a.authenticate(string(response))
 	done = true
 	return
 }
@@ -267,7 +267,8 @@ func (a *oauthBearerServer) Next(response []byte) (challenge []byte, done bool, 
 
 	// Generate empty challenge.
 	if response == nil {
-		return []byte{}, false, nil
+		challenge = []byte{}
+		return
 	}
 
 	a.done = true
