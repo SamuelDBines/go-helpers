@@ -4,16 +4,16 @@ import "net/http"
 
 const sessionCookieName = "replace-this-session-with-a-cookie"
 
-func withSessionBootstrap(sessionToken string) http.HandlerFunc {
-	return withSessionCookie(sessionToken, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusNoContent)
-	})).ServeHTTP
-}
+// func withSessionBootstrap(sessionToken string) http.HandlerFunc {
+// 	return withSessionCookie(sessionToken, http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+// 		w.WriteHeader(http.StatusNoContent)
+// 	})).ServeHTTP
+// }
 
-func withSessionCookie(sessionToken string, next http.Handler) http.Handler {
+func WithSessionCookie(sessionName string, sessionToken string, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.SetCookie(w, &http.Cookie{
-			Name:     sessionCookieName,
+			Name:     sessionName,
 			Value:    sessionToken,
 			Path:     "/",
 			HttpOnly: true,
