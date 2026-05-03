@@ -9,13 +9,18 @@ import (
 )
 
 func String(key string, def ...string) string {
-	if v, ok := os.LookupEnv(key); ok {
+	v, ok := os.LookupEnv(key)
+	if ok && strings.TrimSpace(v) != "" {
 		return v
 	}
 	if len(def) > 0 {
 		return def[0]
 	}
 	panic("missing env: " + key)
+}
+
+func Get(key string, def ...string) string {
+	return String(key, def...)
 }
 
 func Int(key string, def ...int) int {
