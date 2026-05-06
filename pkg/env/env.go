@@ -50,12 +50,11 @@ func Bool(key string, def ...bool) bool {
 				return false
 			}
 		}
-		return false
 	}
 	if len(def) > 0 {
 		return def[0]
 	}
-	panic("missing env: " + key)
+	return false
 }
 
 func Load(path string) error {
