@@ -29,7 +29,6 @@ func Int(key string, def ...int) int {
 		if err != nil {
 			panic("invalid int env " + key + ": " + v)
 		}
-
 		return i
 	}
 
@@ -42,9 +41,16 @@ func Int(key string, def ...int) int {
 
 func Bool(key string, def ...bool) bool {
 	if v, ok := os.LookupEnv(key); ok {
-		if b, err := strconv.ParseBool(strings.TrimSpace(v)); err == nil {
-			return b
+		s := strings.TrimSpace(v)
+		if s != "" {
+			switch strings.ToLower(s) {
+			case "1", "true", "yes", "on":
+				return true
+			default:
+				return false
+			}
 		}
+		return false
 	}
 	if len(def) > 0 {
 		return def[0]
