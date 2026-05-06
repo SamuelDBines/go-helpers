@@ -57,7 +57,7 @@ func Bool(key string, def ...bool) bool {
 	return false
 }
 
-func Load(path string) error {
+func ReadEnvFile(path string) error {
 	f, err := os.Open(path)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -90,4 +90,17 @@ func Load(path string) error {
 		}
 	}
 	return sc.Err()
+}
+
+func Load(path ...string) error {
+	if len(path) == 0 {
+		path = []string{".env"}
+	}
+
+	for _, p := range path {
+		if err := ReadEnvFile(p); err != nil {
+			return err
+		}
+	}
+	return nil
 }
