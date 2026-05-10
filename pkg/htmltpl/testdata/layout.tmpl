@@ -1,0 +1,9 @@
+{{define "layout"}}
+<!doctype html>
+<html><head><title>{{.Title}}</title></head>
+<body>
+<p>{{formatTime .Now}}</p>
+<p>{{formatMoneyCents .Cents}}</p>
+{{template "body" .}}
+</body></html>
+{{end}}
