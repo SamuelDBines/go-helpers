@@ -12,6 +12,7 @@ import (
 	"syscall"
 )
 
+// IO holds stdin/stdout/stderr for [RunJob]. Nil fields fall back to [os.Stdin], [os.Stdout], [os.Stderr].
 type IO struct {
 	Stdin  io.Reader
 	Stdout io.Writer
@@ -39,6 +40,7 @@ func (io *IO) stderr() io.Writer {
 	return io.Stderr
 }
 
+// RunJob runs job.Exec in order or concurrently when job.Parallel is true and there are multiple commands.
 func RunJob(ctx context.Context, job Job, io *IO) error {
 	parts := job.Exec.Parts
 	if len(parts) == 0 {
@@ -104,6 +106,7 @@ func runShell(ctx context.Context, script string, io *IO) error {
 	return waitErr
 }
 
+// OnInterrupt registers SIGINT/SIGTERM to call cancel once. The returned function stops signal delivery.
 func OnInterrupt(cancel context.CancelFunc) (stop func()) {
 	ch := make(chan os.Signal, 4)
 	signal.Notify(ch, os.Interrupt, syscall.SIGTERM)
