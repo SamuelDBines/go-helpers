@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func String(key string, def ...string) string {
@@ -37,6 +38,62 @@ func Int(key string, def ...int) int {
 	}
 
 	panic("missing env: " + key)
+}
+
+// IntDefault parses an int from the environment, or returns def when the key
+// is unset, empty, or not a valid int (no panic). Use for optional numeric knobs.
+func IntDefault(key string, def int) int {
+	v, ok := os.LookupEnv(key)
+	if !ok {
+		return def
+	}
+	v = strings.TrimSpace(v)
+	if v == "" {
+		return def
+	}
+	i, err := strconv.Atoi(v)
+	if err != nil {
+		return def
+	}
+	return i
+}
+
+func Duration(key string, def time.Duration) time.Duration {
+	v, ok := os.LookupEnv(key)
+	if !ok {
+		return def
+	}
+	v = strings.TrimSpace(v)
+	if v == "" {
+		return def
+	}
+	d, err := time.ParseDuration(v)
+	if err != nil {
+		return def
+	}
+	return d
+}
+
+// CommaList splits a comma-separated env value into trimmed non-empty strings.
+// Unset or empty returns nil.
+func CommaList(key string) []string {
+	v, ok := os.LookupEnv(key)
+	if !ok {
+		return nil
+	}
+	v = strings.TrimSpace(v)
+	if v == "" {
+		return nil
+	}
+	parts := strings.Split(v, ",")
+	out := make([]string, 0, len(parts))
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if p != "" {
+			out = append(out, p)
+		}
+	}
+	return out
 }
 
 func Bool(key string, def ...bool) bool {
