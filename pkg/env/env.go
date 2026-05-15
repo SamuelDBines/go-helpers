@@ -40,8 +40,6 @@ func Int(key string, def ...int) int {
 	panic("missing env: " + key)
 }
 
-// IntDefault parses an int from the environment, or returns def when the key
-// is unset, empty, or not a valid int (no panic). Use for optional numeric knobs.
 func IntDefault(key string, def int) int {
 	v, ok := os.LookupEnv(key)
 	if !ok {
@@ -74,8 +72,6 @@ func Duration(key string, def time.Duration) time.Duration {
 	return d
 }
 
-// CommaList splits a comma-separated env value into trimmed non-empty strings.
-// Unset or empty returns nil.
 func CommaList(key string) []string {
 	v, ok := os.LookupEnv(key)
 	if !ok {

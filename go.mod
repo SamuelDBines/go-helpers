@@ -7,3 +7,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	golang.org/x/crypto v0.50.0
 )
+
+require github.com/go-chi/chi/v5 v5.2.5
+
+require github.com/webview/webview v0.0.0-20260309075125-cbbdee44afff // indirect

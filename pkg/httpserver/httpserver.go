@@ -6,9 +6,9 @@ import (
 )
 
 type HTTPResponse struct {
-	Status  int         `json:"status",omitempty`
+	Status  int         `json:"status,omitempty"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data",omitempty`
+	Data    any         `json:"data,omitempty"`
 }
 
 type Config struct {
